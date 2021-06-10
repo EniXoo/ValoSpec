@@ -2,8 +2,6 @@
     <button type="button" class="btn btn-secondary" (click)="onDarkMode()" id="btn-darkmode">Dark Mode</button>
 </div>
   
-  
-
 <div class="d-flex flex-column align-items-center">
     <label for="formFile">File</label>
     <input type="file" name="formFile" id="formFile" class="form-control w-50" accept ="video/mp4" [(ngModel)]="currentFile">
@@ -17,4 +15,12 @@
     </div>
 </div>
 
-<app-video-player *ngFor="let player of players" [playerName]="player.name" [file]="player.file"></app-video-player>
+<div class="d-flex">
+    <div class="text-center" style="flex: 1 1 0;">
+        <h3>Player List</h3>
+        <app-player-list *ngFor="let player of players" [playerName]="player.name" [index]="player.index"></app-player-list>
+    </div>
+    <div  style="flex: 4 1 0;">
+        <app-video-player *ngFor="let player of players" [playerName]="player.name" [file]="player.file"></app-video-player>
+    </div>
+</div>

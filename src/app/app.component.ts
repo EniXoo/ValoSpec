@@ -3,6 +3,7 @@ import { Component, HostListener } from '@angular/core';
 interface player{
   name:string;
   file:File;
+  index:number;
 }
 
 @Component({
@@ -64,7 +65,8 @@ export class AppComponent {
     this.players.push(
       {
         name: this.currentPlayerName,
-        file: document.querySelector('input')!.files![0]
+        file: document.querySelector('input')!.files![0],
+        index: this.players.length+1
       }
     )
     this.currentIndex = this.players.length-1
