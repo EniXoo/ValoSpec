@@ -1,0 +1,11 @@
+<div class="text-center">
+    <button type="button" class="btn btn-secondary" (click)="onDarkMode()" id="btn-darkmode">Dark Mode</button>
+    
+    <input type="file" name="formFile" id="formFile" class="form-control" accept ="video/mp4" [(ngModel)]="currentFile">
+    <input type="text" name="formPlayerName" id="forPlayerName" class="form-control" [(ngModel)]="currentPlayerName">
+    <button class="btn btn-success" (click)="onAddPlayer()">Add Player</button>
+    <button class="btn btn-primary" (click)="onPreviousPlayer()">&lt;</button>
+    <button class="btn btn-primary" (click)="onNextPlayer()">&gt;</button>
+</div>
+
+<app-video-player *ngFor="let player of players" [playerName]="player.name" [file]="player.file"></app-video-player>
