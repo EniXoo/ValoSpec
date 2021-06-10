@@ -13,10 +13,11 @@ interface player{
 
 export class AppComponent {
   isDarked: boolean = false
+  isFullscreen: boolean = false
   players: player[] = []
   currentPlayerName: string = ''
   currentFile!: File
-  currentIndex!: number
+  currentIndex: number = 0
 
   t!: HTMLElement
   v!: HTMLVideoElement
@@ -53,6 +54,7 @@ export class AppComponent {
   changePlayer(index: number) {
     let currentTime = 0
     this.v = document.querySelector('#video'+this.players[this.currentIndex].name)!
+    this.isFullscreen = document.fullscreenElement === this.v ? true : false;
     currentTime = this.v.currentTime
     this.currentIndex = index
     this.hideVODS(currentTime)
@@ -80,11 +82,17 @@ export class AppComponent {
         this.muteVOD(this.v)
       } else {
         this.t = document.querySelector("#"+element.name)!
-        this.t.style.display = 'block'
-        this.v = document.querySelector('#video'+element.name)!
-        this.v.style.display = 'inline-block'
-        this.resume(this.v, currentTime)
-        this.unmuteVOD(this.v)
+        if(this.t !== null) { // Si c'est pas l'apparition
+          this.t.style.display = 'block'
+          this.v = document.querySelector('#video'+element.name)!
+          this.v.style.display = 'inline-block'
+          this.resume(this.v, currentTime)
+          this.unmuteVOD(this.v)
+          if(this.isFullscreen) 
+            this.setFullscreen(this.v)
+          else
+            this.exitFullscreen()
+        }
       }
     })
   }
@@ -98,13 +106,22 @@ export class AppComponent {
     vod.muted = true
   }
 
+  setFullscreen(vod: HTMLVideoElement) {
+    vod.requestFullscreen()
+  }
+
+  exitFullscreen() {
+    if(document.fullscreenElement !== null)
+      document.exitFullscreen()
+  }
+
   unmuteVOD(vod: HTMLVideoElement) {
     vod.muted = false
   }
 
   onPreviousPlayer() {
     let currentTime = 0
-    if(this.currentIndex !== 0) {
+    if(this.currentIndex > 0) {
       this.v = document.querySelector('#video'+this.players[this.currentIndex].name)!
       currentTime = this.v.currentTime
       this.currentIndex--
@@ -114,7 +131,7 @@ export class AppComponent {
 
   onNextPlayer() {
     let currentTime = 0
-    if(this.currentIndex !== this.players.length-1) {
+    if(this.currentIndex < this.players.length-1) {
       this.v = document.querySelector('#video'+this.players[this.currentIndex].name)!
       currentTime = this.v.currentTime
       this.currentIndex++
@@ -126,14 +143,18 @@ export class AppComponent {
     let inputs = document.querySelectorAll('input')
     if(this.isDarked) {
       document.querySelector('body')!.style.backgroundColor = '#FFFFFF'
+      document.querySelector('body')!.style.color = '#333333'
       inputs.forEach(element => {
-        element.style.backgroundColor = '#FFFFFF'
+        element.style.backgroundColor = "#FFFFFF"
+        element.style.color = "#333333"
       });
       document.querySelector('#btn-darkmode')!.textContent = 'Dark Mode'
     } else {
       document.querySelector('body')!.style.backgroundColor = '#333333'
+      document.querySelector('body')!.style.color = '#FFFFFF'
       inputs.forEach(element => {
-        element.style.backgroundColor = '#333333'
+        element.style.backgroundColor = "#333333"
+        element.style.color = "#FFFFFF"
       });
       document.querySelector('#btn-darkmode')!.textContent = 'Light Mode'
     }  
